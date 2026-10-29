@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "322652555108",
+    "project_id": "eunomia-20e00",
+    "storage_bucket": "eunomia-20e00.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322652555108:android:82b4f1883e5a18609a1c71",
+        "android_client_info": {
+          "package_name": "com.example.eunomia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy3cxkGUKPGaPxIPhbr0s8x8WfoROOQd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
