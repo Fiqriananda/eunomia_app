@@ -16,7 +16,11 @@ class HomeController extends GetxController {
     fetchHomeData();
   }
 
-  Future<void> fetchHomeData() async {
+  Future<void> fetchHomeData({bool clearPrevious = false}) async {
+    if (clearPrevious) {
+      homeData.value = null;
+      currentCycle.value = null;
+    }
     isLoading.value = true;
     try {
       final wsId = api.currentWorkspace.value?.id;

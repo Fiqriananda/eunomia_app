@@ -31,7 +31,7 @@ class CyclesController extends GetxController {
           api.getWorkspaceMembers(wsId)
         else
           Future.value(<WorkspaceMemberModel>[]),
-        api.getTrash(),
+        api.getTrash(workspaceId: wsId),
       ]);
 
       cycles.assignAll(results[0] as List<CycleModel>);

@@ -80,7 +80,8 @@ class _CommandPaletteModalState extends State<CommandPaletteModal> {
 
     setState(() => _isSearching = true);
     try {
-      final results = await _apiService.searchMobile(query.trim());
+      final wsId = _apiService.currentWorkspace.value?.id;
+      final results = await _apiService.searchMobile(query.trim(), workspaceId: wsId);
       if (mounted) {
         setState(() {
           _liveTasks = results.tasks;

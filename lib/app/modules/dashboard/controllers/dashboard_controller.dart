@@ -90,6 +90,7 @@ class DashboardController extends GetxController {
         }) async {
           final newTask = await api.createTask(
             title: title,
+            workspaceId: currentWorkspace?.id,
             description: description,
             status: status,
             priority: priority,
@@ -132,10 +133,10 @@ class DashboardController extends GetxController {
     await api.switchWorkspace(ws);
 
     if (Get.isRegistered<HomeController>()) {
-      Get.find<HomeController>().fetchHomeData();
+      Get.find<HomeController>().fetchHomeData(clearPrevious: true);
     }
     if (Get.isRegistered<TasksController>()) {
-      Get.find<TasksController>().fetchTasks();
+      Get.find<TasksController>().fetchTasks(clearPrevious: true);
     }
     if (Get.isRegistered<InboxController>()) {
       Get.find<InboxController>().fetchNotifications();

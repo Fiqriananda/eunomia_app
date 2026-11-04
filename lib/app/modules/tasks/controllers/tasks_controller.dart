@@ -22,10 +22,15 @@ class TasksController extends GetxController {
     fetchTasks();
   }
 
-  Future<void> fetchTasks() async {
+  Future<void> fetchTasks({bool clearPrevious = false}) async {
+    if (clearPrevious) {
+      tasks.clear();
+    }
     isLoading.value = true;
     try {
+      final wsId = api.currentWorkspace.value?.id;
       final list = await api.getMobileTasks(
+        workspaceId: wsId,
         filter: selectedScope.value,
         status: selectedStatus.value,
         priority: selectedPriority.value,

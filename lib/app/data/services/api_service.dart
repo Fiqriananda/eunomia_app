@@ -163,9 +163,7 @@ class ApiService extends GetxService {
     return true;
   }
 
-  // ==========================================
-  // AUTHENTICATION & WORKSPACE
-  // ==========================================
+  // Authentication & Workspace
 
   
   // Device Token / Push Notification Sync
@@ -335,18 +333,18 @@ class ApiService extends GetxService {
   // MOBILE HOME & DASHBOARD
 
   Future<HomeDataModel> getMobileHome({String? workspaceId}) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/home',
-      query: {'workspaceId': workspaceId},
+      query: {'workspaceId': activeWsId},
       parser: (data) => HomeDataModel.fromJson(data as Map<String, dynamic>),
     );
   }
 
-  // ==========================================
-  // TASKS
-  // ==========================================
+  // Tasks
 
   Future<List<TaskModel>> getMobileTasks({
+    String? workspaceId,
     String filter = 'all',
     String? status,
     String? priority,
@@ -357,9 +355,11 @@ class ApiService extends GetxService {
     int page = 1,
     int limit = 100,
   }) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/tasks',
       query: {
+        'workspaceId': activeWsId,
         'filter': filter,
         'status': status,
         'priority': priority,
@@ -390,6 +390,7 @@ class ApiService extends GetxService {
 
   Future<TaskModel?> createTask({
     required String title,
+    String? workspaceId,
     String? description,
     String? status,
     String? priority,
@@ -397,10 +398,12 @@ class ApiService extends GetxService {
     String? cycleId,
     List<String>? labels,
   }) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return post(
       '/mobile/tasks',
       body: {
         'title': title,
+        'workspaceId': activeWsId,
         'description': ?description,
         'status': ?status,
         'priority': ?priority,
@@ -521,42 +524,42 @@ class ApiService extends GetxService {
     );
   }
 
-  // ==========================================
-  // CYCLES & PROJECTS
-  // ==========================================
+  // Cycles & Projects
 
   Future<List<CycleModel>> getCycles({String? workspaceId}) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/cycles',
-      query: {'workspaceId': workspaceId},
+      query: {'workspaceId': activeWsId},
       parser: (data) => (data is List) ? data.map((e) => CycleModel.fromJson(e)).toList() : [],
     );
   }
 
   Future<CycleModel?> getCurrentCycle({String? workspaceId}) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/cycles/current',
-      query: {'workspaceId': workspaceId},
+      query: {'workspaceId': activeWsId},
       parser: (data) => (data != null && data is Map<String, dynamic>) ? CycleModel.fromJson(data) : null,
     );
   }
 
   Future<List<ProjectModel>> getProjects({String? workspaceId}) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/projects',
-      query: {'workspaceId': workspaceId},
+      query: {'workspaceId': activeWsId},
       parser: (data) => (data is List) ? data.map((e) => ProjectModel.fromJson(e)).toList() : [],
     );
   }
 
-  // ==========================================
-  // TRASH
-  // ==========================================
+  // Trash
 
-  Future<List<TaskModel>> getTrash({int page = 1, int limit = 50}) {
+  Future<List<TaskModel>> getTrash({String? workspaceId, int page = 1, int limit = 50}) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/trash',
-      query: {'page': page, 'limit': limit},
+      query: {'workspaceId': activeWsId, 'page': page, 'limit': limit},
       parser: (data) {
         if (data is Map && data['items'] is List) {
           return (data['items'] as List).map((e) => TaskModel.fromJson(e)).toList();
@@ -572,36 +575,36 @@ class ApiService extends GetxService {
 
   Future<bool> permanentDeleteTask(String id) => delete('/mobile/trash/$id');
 
-  // ==========================================
-  // WORKSPACE MEMBERS & SEARCH
-  // ==========================================
+  // Workspace Members & Search
 
-  Future<List<WorkspaceMemberModel>> getWorkspaceMembers(String workspaceId) {
+  Future<List<WorkspaceMemberModel>> getWorkspaceMembers([String? workspaceId]) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id ?? '';
     return get(
-      '/mobile/workspaces/$workspaceId/members',
+      '/mobile/workspaces/$activeWsId/members',
       parser: (data) => (data is List) ? data.map((e) => WorkspaceMemberModel.fromJson(e)).toList() : [],
     );
   }
 
-  Future<UserHoverCardModel?> getUserHoverCard(String userId) {
+  Future<UserHoverCardModel?> getUserHoverCard(String userId, {String? workspaceId}) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/users/$userId/hover-card',
+      query: {'workspaceId': activeWsId},
       parser: (data) => (data != null && data is Map<String, dynamic>) ? UserHoverCardModel.fromJson(data) : null,
     );
   }
 
-  Future<SearchResultsModel> searchMobile(String query) {
+  Future<SearchResultsModel> searchMobile(String query, {String? workspaceId}) {
     if (query.trim().isEmpty) return Future.value(const SearchResultsModel());
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/search',
-      query: {'q': query},
+      query: {'q': query, 'workspaceId': activeWsId},
       parser: (data) => (data != null && data is Map<String, dynamic>) ? SearchResultsModel.fromJson(data) : const SearchResultsModel(),
     );
   }
 
-  // ==========================================
-  // NOTIFICATIONS
-  // ==========================================
+  // Notifications
 
   Future<List<NotificationItem>> getNotifications({bool? unreadOnly}) {
     return get(
@@ -638,14 +641,13 @@ class ApiService extends GetxService {
     return post('/mobile/notifications/read-all', parser: (_) => true);
   }
 
-  // ==========================================
-  // ADMIN PERFORMANCE
-  // ==========================================
+  // Admin Performance
 
   Future<AdminPerformanceModel> getAdminPerformance({String? workspaceId, String period = 'all'}) {
+    final activeWsId = workspaceId ?? currentWorkspace.value?.id;
     return get(
       '/mobile/admin/performance',
-      query: {'workspaceId': workspaceId, 'period': period},
+      query: {'workspaceId': activeWsId, 'period': period},
       parser: (data) => AdminPerformanceModel.fromJson(data as Map<String, dynamic>),
     );
   }

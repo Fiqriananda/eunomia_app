@@ -24,6 +24,7 @@ class DashboardView extends GetView<DashboardController> {
 
       return Scaffold(
         backgroundColor: AppColors.canvas,
+        resizeToAvoidBottomInset: false,
         appBar: LinearTopBar(
           user: user,
           workspace: workspace,
