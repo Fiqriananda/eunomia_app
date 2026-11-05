@@ -5,7 +5,7 @@ import 'package:eunomia/app/data/models/models.dart';
 void main() {
   test('ApiService initializes with correct default base URL', () {
     final api = ApiService();
-    expect(api.baseUrl.value, 'https://eunomiaapi.motionlaboratory.com');
+    expect(api.baseUrl.value, 'https://eunomiaapi.naxistron.my.id');
   });
 
   test('TaskStatusEnum converts properly from string and keys', () {

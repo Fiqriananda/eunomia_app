@@ -11,7 +11,7 @@ import '../models/models.dart';
 class ApiService extends GetxService {
   static ApiService get to => Get.find<ApiService>();
 
-  static const String _defaultUrl = 'https://eunomiaapi.motionlaboratory.com';
+  static const String _defaultUrl = 'https://eunomiaapi.naxistron.my.id';
   static const String _tokenKey = 'eunomia_auth_token';
   static const String _workspaceKey = 'eunomia_selected_workspace_id';
 
